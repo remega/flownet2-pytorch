@@ -7,7 +7,7 @@ from torch.autograd import Variable
 from tensorboardX import SummaryWriter
 
 import argparse, os, sys, subprocess
-import setproctitle, colorama
+# import setproctitle, colorama
 import numpy as np
 from tqdm import tqdm
 from glob import glob
@@ -81,6 +81,12 @@ if __name__ == '__main__':
                                     parameter_defaults={'root': './MPI-Sintel/flow/training',
                                                         'replicates': 1})
 
+
+
+
+
+
+
     main_dir = os.path.dirname(os.path.realpath(__file__))
     os.chdir(main_dir)
 
@@ -94,10 +100,10 @@ if __name__ == '__main__':
         defaults = vars(parser.parse_args(['--IGNORE']))
 
         # Print all arguments, color the non-defaults
-        for argument, value in sorted(vars(args).items()):
-            reset = colorama.Style.RESET_ALL
-            color = reset if value == defaults[argument] else colorama.Fore.MAGENTA
-            block.log('{}{}: {}{}'.format(color, argument, value, reset))
+        # for argument, value in sorted(vars(args).items()):
+        #     reset = colorama.Style.RESET_ALL
+        #     color = reset if value == defaults[argument] else colorama.Fore.MAGENTA
+        #     block.log('{}{}: {}{}'.format(color, argument, value, reset))
 
         args.model_class = tools.module_to_dict(models)[args.model]
         args.optimizer_class = tools.module_to_dict(torch.optim)[args.optimizer]
@@ -108,7 +114,7 @@ if __name__ == '__main__':
         args.inference_dataset_class = tools.module_to_dict(datasets)[args.inference_dataset]
 
         args.cuda = not args.no_cuda and torch.cuda.is_available()
-        args.current_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
+        # args.current_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).rstrip()
         args.log_file = join(args.save, 'args.txt')
 
         # dict to collect activation gradients (for training debug purpose)
@@ -121,7 +127,13 @@ if __name__ == '__main__':
             args.inference_dir = "{}/inference".format(args.save)
 
     print('Source Code')
-    print(('  Current Git Hash: {}\n'.format(args.current_hash)))
+    # print(('  Current Git Hash: {}\n'.format(args.current_hash)))
+    kwargs = tools.kwargs_from_args(args, 'model')
+    model = args.model_class(args, **kwargs)
+    num_params = 0
+    for param in model.parameters():
+        num_params += param.numel()
+    print(num_params / 1e6)
 
     # Change the title for `top` and `pkill` commands
     setproctitle.setproctitle(args.save)
@@ -179,6 +191,8 @@ if __name__ == '__main__':
                     return loss_values, output
 
         model_and_loss = ModelAndLoss(args)
+
+
 
         block.log('Effective Batch Size: {}'.format(args.effective_batch_size))
         block.log('Number of parameters: {}'.format(sum([p.data.nelement() if p.requires_grad else 0 for p in model_and_loss.parameters()])))

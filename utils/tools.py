@@ -5,15 +5,15 @@ import subprocess, shutil
 from os.path import *
 import numpy as np
 from inspect import isclass
-from pytz import timezone
-from datetime import datetime
+# from pytz import timezone
+# from datetime import datetime
 import inspect
 import torch
 
 def datestr():
-    pacific = timezone('US/Pacific')
-    now = datetime.now(pacific)
-    return '{}{:02}{:02}_{:02}{:02}'.format(now.year, now.month, now.day, now.hour, now.minute)
+    # pacific = timezone('US/Pacific')
+    # now = datetime.now(pacific)
+    return '1'#'{}{:02}{:02}_{:02}{:02}'.format(now.year, now.month, now.day, now.hour, now.minute)
 
 def module_to_dict(module, exclude=[]):
         return dict([(x, getattr(module, x)) for x in dir(module)
