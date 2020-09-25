@@ -14,12 +14,12 @@ For more help, type <br />
 Below are the different flownet neural network architectures that are provided. <br />
 A batchnorm version for each network is also available.
 
- - **FlowNet2S**
- - **FlowNet2C**
- - **FlowNet2CS**
- - **FlowNet2CSS**
- - **FlowNet2SD**
- - **FlowNet2**
+ - **FlowNet2S**  38.68M
+ - **FlowNet2C**  39.18M
+ - **FlowNet2CS**   77.87M
+ - **FlowNet2CSS**  116.57M
+ - **FlowNet2SD**   45.37M
+ - **FlowNet2** 162.52M
 
 ## Custom layers
 
